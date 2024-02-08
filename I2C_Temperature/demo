@@ -1,0 +1,2 @@
+The main aim of this project is to continuously detect the temperature using LM75 I2C based temperature sensor and monitor the temperature. If the temperature exceeds a threshold it will send a message to the user using the GSM module interfaced to the 8051 using UART protocol.
+The main purpose for doing this project is to interface a temperature sensor using I2C protocol. The main advantage of this protocol is, Many slave devices are connected to the master device by only using 2 wires.
