@@ -1,0 +1,251 @@
+#include<reg51.h>
+sbit d6=P3^0;
+sbit d5=P3^1;
+sbit d4=P3^2;
+sbit d3=P3^3;
+sbit d2=P3^4;
+sbit d1=P3^5;
+
+sbit r1=P1^0;
+sbit r2=P1^1;
+sbit r3=P1^2;
+sbit r4=P1^3;
+sbit c1=P1^4;
+sbit c2=P1^5;
+sbit c3=P1^6;
+
+sbit rs=P2^0;
+
+void delay(unsigned int);
+int keypad();
+void set();
+void increment();
+
+unsigned char ch[]={0xc0,0xf9,0xa4,0xb0,0x99,0x92,0x82,0xf8,0x80,0x90};
+unsigned int arr[6];
+//unsigned int hours,minutes,seconds=0;
+unsigned int key;
+
+void main()
+{
+	P0=ch[0];
+	P2=0x00;
+	if((rs==1))
+			{
+				set();
+			increment();
+			}
+}
+
+void delay(unsigned int time)
+{
+	int i,j;
+	for(i=0;i<time;i++)
+	{
+		for(j=0;j<=90;j++)
+		{
+		}
+	}
+}
+
+void set()
+{
+	unsigned char i;
+	for(i=0;i<2;i++)
+	{
+		while(!(key=keypad()));
+		arr[i]=key-'0';
+		if(i==0)
+					{
+						if(arr[i]>1)
+						{
+							arr[i]=0;
+						}
+						else{
+						d6=1;
+						d1=d2=d3=d4=d5=0;
+						P0=ch[arr[i]];
+						delay(1);
+						}
+					}
+		else
+					{
+						P0=0xff;
+						d5=1;
+						d1=d2=d3=d4=d6=0;
+						P0=ch[arr[i]];
+						delay(1);
+					}
+				
+		
+	}
+	for(i=2;i<4;i++)
+	{
+		while(!(key=keypad()));
+		arr[i]=key-'0';
+		if(i==2)
+					{	
+						P0=0xff;
+						d4=1;
+						d1=d2=d3=d5=d6=0;
+						P0=ch[arr[i]];
+						delay(1);
+					}
+		else
+					{
+						P0=0xff;
+						d3=1;
+						d1=d2=d4=d5=d6=0;
+						P0=ch[arr[i]];
+						delay(1);
+					}
+				
+		
+	}
+	for(i=4;i<6;i++)
+	{
+		
+		while(!(key=keypad()));
+		arr[i]=key-'0';
+		if(i==4)
+					{
+						P0=0xff;
+						d2=1;
+						d1=d3=d4=d5=d6=0;
+						P0=ch[arr[i]];
+						delay(1);
+					}
+		else
+					{
+						P0=0xff;
+						d1=1;
+						d2=d3=d4=d5=d6=0;
+						P0=ch[arr[i]];
+						delay(1);
+					}
+	}
+}
+
+
+int keypad()
+{
+	r1=r2=r3=r4=1;
+	c1=0;
+	c2=c3=1;
+	if(r1==0){while(r1==0);return '1';}
+	if(r2==0){while(r2==0);return '4';}
+	if(r3==0){while(r3==0);return '7';}
+	if(r4==0){while(r4==0);return '*';}
+	r1=r2=r3=r4=1;
+	c2=0;
+	c1=c3=1;
+	if(r1==0){while(r1==0);return '2';}
+	if(r2==0){while(r2==0);return '5';}
+	if(r3==0){while(r3==0);return '8';}
+	if(r4==0){while(r4==0);return '0';}
+	r1=r2=r3=r4=1;
+	c3=0;
+	c1=c2=1;
+	if(r1==0){while(r1==0);return '3';}
+	if(r2==0){while(r2==0);return '6';}
+	if(r3==0){while(r3==0);return '9';}
+	if(r4==0){while(r4==0);return '#';}
+	return 0;
+}
+
+void increment()
+{
+	int v0=0;
+	int v1,v2,v3,v4,v5,v6;
+	v1=arr[5];
+	v2=arr[4];
+	v3=arr[3];
+	v4=arr[2];
+	v5=arr[1];
+	v6=arr[0];
+	while(1)
+			{
+			v0=v0+1;
+			if(v0==130)
+			{
+				v0=0;
+				v1=v1+1;
+			}
+			P0=0xff;
+			d1=1;
+			d2=d3=d4=d5=d6=0;
+			P0=ch[v1];
+			delay(1);
+		
+			if(v1==10)
+			{
+				v1=0;
+				v2=v2+1;
+			}
+			P0=0xff;
+			d2=1;
+			d1=d3=d4=d5=d6=0;
+			P0=ch[v2];
+			delay(1);
+			
+			if(v2==6)
+			{
+				v2=0;
+				v3=v3+1;
+			}
+			P0=0xff;
+			d3=1;
+			d1=d2=d4=d5=d6=0;
+			P0=ch[v3];
+			delay(1);
+			
+			if(v3==10)
+			{
+				v3=0;
+				v4=v4+1;
+			}
+			P0=0xff;
+			d4=1;
+			d1=d2=d3=d5=d6=0;
+			P0=ch[v4];
+			delay(1);
+			
+			if(v4==6)
+			{
+				v4=0;
+				v5=v5+1;
+			}
+			P0=0xff;
+			d5=1;
+			d1=d2=d3=d4=d6=0;
+			P0=ch[v5];
+			delay(1);
+			
+			if(v5==10)
+			{
+				v5=0;
+				v6=v6+1;
+			}
+			P0=0xff;
+			d6=1;
+			d1=d2=d3=d4=d5=0;
+			P0=ch[v6];
+			delay(1);
+			if(v6==1 && v5==3)
+			{
+				v1=v2=v3=v4=v6=0;
+				v5=1;
+				P0=ch[v6];
+				P0=ch[v5];
+				delay(1);
+			}
+		}
+}
+
+
+
+		
+	
+	
+
+	
